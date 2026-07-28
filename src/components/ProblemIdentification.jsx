@@ -1,236 +1,179 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
-import { AlertCircle, TrendingUp, DollarSign, Shield, Zap, Users, Rocket, PiggyBank, Cog } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { useToast } from '@/components/ui/use-toast';
+import { 
+  MousePointerClick, Puzzle, CloudCog, Database, Users, User, Target
+} from 'lucide-react';
+import ProblemParticleField from './problem/ProblemParticleField';
+import ProblemDiagnosticDashboard from './problem/ProblemDiagnosticDashboard';
 
-const problems = [
-  { icon: AlertCircle, title: "Herramientas desconectadas", desc: "Silos de información que frenan decisiones." },
-  { icon: TrendingUp, title: "Crecimiento desordenado", desc: "Escalabilidad sin estrategia ni control." },
-  { icon: DollarSign, title: "Costos imprevistos", desc: "Fugas de presupuesto en recursos zombie." },
-  { icon: Shield, title: "Datos en riesgo", desc: "Vulnerabilidades por falta de gobierno." },
-  { icon: Zap, title: "Procesos lentos", desc: "Burocracia técnica que mata la innovación." },
-  { icon: Users, title: "Falta de visibilidad", desc: "Ceguera operativa sobre el rendimiento real." }
+const problemsList = [
+  {
+    num: 1,
+    icon: MousePointerClick,
+    title: 'Procesos manuales',
+    desc: 'Tareas repetitivas que consumen tiempo y frenan al equipo.'
+  },
+  {
+    num: 2,
+    icon: Puzzle,
+    title: 'Herramientas desconectadas',
+    desc: 'CRM, formularios, mensajería y reportes sin integración.'
+  },
+  {
+    num: 3,
+    icon: CloudCog,
+    title: 'Costos cloud sin control',
+    desc: 'Infraestructura sobredimensionada o mal optimizada.'
+  },
+  {
+    num: 4,
+    icon: Database,
+    title: 'Datos dispersos',
+    desc: 'Información crítica repartida entre plataformas y hojas de cálculo.'
+  },
+  {
+    num: 5,
+    icon: Users,
+    title: 'Baja trazabilidad comercial',
+    desc: 'Difícil seguimiento de leads, clientes y oportunidades.'
+  },
+  {
+    num: 6,
+    icon: User,
+    title: 'Dependencia operativa',
+    desc: 'La operación depende demasiado de tareas humanas y conocimiento informal.'
+  }
 ];
 
-const container = {
-  hidden: { opacity: 0 },
-  show: {
-    opacity: 1,
-    transition: { staggerChildren: 0.1 }
-  }
-};
-
-const item = {
-  hidden: { opacity: 0, x: -20 },
-  show: { opacity: 1, x: 0, transition: { type: "spring", stiffness: 50 } }
-};
-
 const ProblemIdentification = () => {
-  const { toast } = useToast();
+  const [pulseIdx, setPulseIdx] = useState(null);
 
-  const handleConsult = () => {
-    toast({
-      title: "Solicitud recibida",
-      description: "Pronto te conectaremos con un consultor experto. 🚀",
-    });
-  };
+  useEffect(() => {
+    const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (prefersReduced) return;
+
+    // Periodic subtle activation pulse on one of the six cards
+    const interval = setInterval(() => {
+      const targetIdx = Math.floor(Math.random() * problemsList.length);
+      setPulseIdx(targetIdx);
+      setTimeout(() => setPulseIdx(null), 1200);
+    }, 8000);
+
+    return () => clearInterval(interval);
+  }, []);
 
   return (
-    <section className="relative py-32 px-4 overflow-hidden bg-gradient-to-b from-[#060b16] to-[#02050c]">
-
-      {/* 🔤 Marquee de fondo — "optimizApp" scrolling en múltiples filas */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none select-none z-0">
-        <style>{`
-          @keyframes marquee-left  { from { transform: translateX(0); }    to { transform: translateX(-50%); } }
-          @keyframes marquee-right { from { transform: translateX(-50%); } to { transform: translateX(0); }    }
-          .ml-fast  { animation: marquee-left  18s linear infinite; }
-          .ml-mid   { animation: marquee-left  26s linear infinite; }
-          .mr-fast  { animation: marquee-right 20s linear infinite; }
-          .mr-mid   { animation: marquee-right 30s linear infinite; }
-        `}</style>
-        {[...Array(40)].map((_, rowIdx) => {
-          const dirs = ['ml-fast', 'mr-mid', 'ml-mid', 'mr-fast'];
-          const cls = dirs[rowIdx % dirs.length];
-          const text = Array(24).fill('optimizApp').join('   ·   ');
-          return (
-            <div
-              key={rowIdx}
-              className="flex whitespace-nowrap"
-              style={{ lineHeight: '2.6rem' }}
-            >
-              <span
-                className={`text-[13px] font-bold tracking-[0.3em] uppercase ${cls}`}
-                style={{ color: 'rgba(59,130,246,0.20)' }}
-              >
-                {text}&nbsp;&nbsp;&nbsp;{text}
-              </span>
-            </div>
-          );
-        })}
+    <section 
+      className="relative w-full min-h-[100vh] min-h-[100svh] flex items-center justify-center overflow-x-hidden pt-16 pb-16 bg-[#020B1B] z-10 problem-v2-background-gradient"
+    >
+      {/* Background Mesh (Behind Left Cards) */}
+      <div className="absolute bottom-0 left-0 w-[40%] h-[40%] pointer-events-none z-1">
+        <ProblemParticleField />
       </div>
 
-      {/* overlays decorativos */}
-      <div className="absolute right-0 top-0 h-full w-1/3 bg-gradient-to-l from-blue-900/5 to-transparent pointer-events-none" />
-      <div className="absolute left-0 bottom-0 w-full h-px bg-gradient-to-r from-transparent via-blue-500/20 to-transparent" />
-
-      {/* contenido principal */}
-      <div className="relative z-10 max-w-7xl mx-auto">
+      {/* Two Column Grid */}
+      <div className="relative z-10 w-[calc(100%-80px)] max-w-[1540px] mx-auto flex flex-col xl:flex-row items-start justify-between gap-[38px] xl:gap-[48px] h-full">
+        
+        {/* Left Column: Commercial content (42%) */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="mb-16 md:flex justify-between items-end"
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          className="w-full xl:w-[42%] flex flex-col z-10"
         >
-          <div className="max-w-2xl">
-            <h2 className="text-sm font-semibold text-blue-500 mb-2 tracking-wider uppercase">
-              Identificación
-            </h2>
-            <h3 className="text-3xl md:text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-white to-gray-400">
-              Si esto te pasa, <br />no estás solo.
-            </h3>
+          {/* Eyebrow */}
+          <div className="flex items-center gap-2 mb-5">
+            <span className="w-1.5 h-1.5 rounded-full bg-[#246bfd] shadow-[0_0_8px_#246bfd]" />
+            <span className="text-[16px] font-semibold text-[#246bfd] tracking-wide block">
+              El problema
+            </span>
           </div>
 
-          <p className="mt-4 md:mt-0 text-gray-400 max-w-md text-sm md:text-base border-l-2 border-blue-500/30 pl-4">
-            La complejidad tecnológica es el principal freno del crecimiento empresarial moderno. Nosotros ponemos orden.
+          {/* Title */}
+          <h2 className="text-[34px] sm:text-[38px] xl:text-[42px] font-extrabold text-[#F8FAFC] leading-[1.18] tracking-tight">
+            La tecnología debería acelerar
+            <br className="hidden xl:inline" />
+            {' '}tu empresa, no volverla más
+            <br className="hidden xl:inline" />
+            {' '}compleja.
+          </h2>
+
+          {/* Description */}
+          <p className="text-[17px] sm:text-[18px] text-[#A6B2C6] font-normal leading-[1.45] mt-3.5 mb-6 max-w-[590px]">
+            Muchas empresas crecen con procesos manuales, herramientas desconectadas y poca visibilidad operativa. El resultado es más fricción, más costo y menos capacidad de decisión.
           </p>
+
+          {/* Six Problem Cards List */}
+          <div className="flex flex-col gap-2.5 w-full">
+            {problemsList.map((p, idx) => {
+              const IconComponent = p.icon;
+              const isPulsing = pulseIdx === idx;
+
+              return (
+                <div
+                  key={p.num}
+                  className="w-full h-[82px] rounded-[12px] px-4 flex items-center gap-3 transition-all duration-300 hover:translate-y-[-2px] group"
+                  style={{
+                    background: isPulsing 
+                      ? 'linear-gradient(145deg, rgba(19, 44, 76, 0.85), rgba(11, 31, 56, 0.90))'
+                      : 'linear-gradient(145deg, rgba(14, 36, 66, 0.84), rgba(8, 25, 49, 0.90))',
+                    border: isPulsing
+                      ? '1px solid rgba(96, 165, 250, 0.38)'
+                      : '1px solid rgba(74, 128, 197, 0.16)',
+                    boxShadow: '0 12px 30px rgba(0, 8, 25, 0.18), inset 0 1px 0 rgba(91, 150, 226, 0.035)'
+                  }}
+                >
+                  {/* Number Circle */}
+                  <div 
+                    className="w-7 h-7 rounded-full border flex items-center justify-center text-[13px] font-bold text-slate-400 shrink-0 transition-colors duration-300"
+                    style={{ borderColor: 'rgba(64, 133, 224, 0.32)' }}
+                  >
+                    {p.num}
+                  </div>
+
+                  {/* Icon Square Wrapper */}
+                  <div className="w-9 h-9 rounded-lg bg-[#07172d] border border-[#246bfd]/20 flex items-center justify-center text-[#246bfd] shrink-0 group-hover:text-[#60a5fa] group-hover:shadow-[0_0_8px_rgba(36,107,253,0.3)] transition-all">
+                    <IconComponent className="w-5 h-5" />
+                  </div>
+
+                  {/* Text Details */}
+                  <div className="flex flex-col min-w-0">
+                    <span className="text-[14px] xl:text-[15px] font-bold text-white leading-tight">{p.title}</span>
+                    <span className="text-[11px] xl:text-[12px] text-[#A6B2C6] leading-snug mt-0.5 truncate">{p.desc}</span>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
         </motion.div>
 
-        <div className="grid lg:grid-cols-2 gap-16 items-center">
+        {/* Right Column: Dashboard (58%) */}
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.7, delay: 0.15 }}
+          className="w-full xl:w-[58%] flex flex-col gap-4.5 z-10"
+        >
+          {/* Diagnostic Dashboard */}
+          <ProblemDiagnosticDashboard />
 
-          {/* TEXT */}
-          <motion.div
-            className="relative z-20"
-            initial={{ opacity: 0, x: -50 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8 }}
+          {/* Solution Franja Inferior */}
+          <div 
+            className="w-full h-[78px] rounded-[14px] px-5 flex items-center gap-3.5 mt-1"
+            style={{
+              background: 'linear-gradient(145deg, rgba(13, 34, 62, 0.68), rgba(7, 23, 45, 0.78))',
+              border: '1px solid rgba(73, 121, 183, 0.22)'
+            }}
           >
-            <div className="inline-block px-3 py-1 mb-6 border border-blue-500/30 rounded-full bg-blue-500/5">
-              <span className="text-blue-400 text-sm font-medium tracking-wide">
-                CORE EXPERTISE
-              </span>
+            <div className="w-9 h-9 rounded-full bg-[#246bfd]/10 flex items-center justify-center text-[#246bfd] shrink-0">
+              <Target className="w-5 h-5" />
             </div>
-
-            <h2 className="text-4xl md:text-6xl font-bold mb-8 leading-tight">
-              Consultoría Cloud & AI <br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-indigo-400">
-                enfocada en resultados.
-              </span>
-            </h2>
-
-            <p className="text-lg text-gray-400 mb-12 leading-relaxed">
-              No vendemos servidores, vendemos eficiencia. Nuestro enfoque integra
-              inteligencia artificial y arquitectura cloud moderna.
+            <p className="text-[14px] xl:text-[15px] font-medium text-white leading-tight">
+              Ordenamos la complejidad para recuperar <span className="text-[#60a5fa] font-bold">control, eficiencia y visibilidad.</span>
             </p>
-
-            <div className="space-y-8">
-              {[
-                { icon: Rocket, title: "Crecimiento ordenado", text: "Escala globalmente con arquitectura resiliente." },
-                { icon: PiggyBank, title: "Costos optimizados", text: "FinOps para maximizar el ROI de cada dólar." },
-                { icon: Cog, title: "Operación eficiente", text: "Automatización inteligente y efectiva." }
-              ].map((item, idx) => (
-                <motion.div
-                  key={idx}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: idx * 0.2 }}
-                  className="flex gap-4 group"
-                >
-                  <div className="w-12 h-12 rounded-xl bg-[#0f1629] border border-white/5 flex items-center justify-center">
-                    <item.icon className="w-6 h-6 text-gray-400 group-hover:text-blue-400 transition-colors" />
-                  </div>
-                  <div>
-                    <h3 className="text-xl font-semibold">{item.title}</h3>
-                    <p className="text-gray-500 text-sm">{item.text}</p>
-                  </div>
-                </motion.div>
-              ))}
-            </div>
-
-            <Button
-              onClick={handleConsult}
-              className="
-                mt-12 px-8 py-6 text-lg rounded-xl font-semibold
-                bg-white text-black
-                hover:bg-white hover:text-black
-                relative z-30
-              "
-            >
-              Explorar soluciones
-            </Button>
-          </motion.div>
-
-          {/* VISUAL */}
-          <div className="relative h-[600px] w-full hidden lg:block">
-
-            {/* CUADRO 1 – BASE (con imagen) */}
-            <motion.div
-              animate={{ y: [0, 12, 0] }}
-              whileHover={{ scale: 1.25, zIndex: 40 }}
-              transition={{ type: "spring", stiffness: 200, damping: 15 }}
-              className="
-                absolute top-1/4 left-10 w-56 h-56 rounded-3xl
-                overflow-hidden
-                border border-blue-500/20 backdrop-blur-xl
-                shadow-[0_0_80px_rgba(59,130,246,0.4)]
-              "
-            >
-              <img
-                src="https://i.imgur.com/bGBCISZ.jpeg"
-                alt="Cloud Infrastructure"
-                className="w-full h-full object-cover opacity-90"
-              />
-
-              {/* overlay sutil */}
-              <div className="absolute inset-0 bg-gradient-to-br from-blue-900/30 to-indigo-900/20" />
-            </motion.div>
-
-            {/* CUADRO 2 – MEDIO (con imagen) */}
-            <motion.div
-              animate={{ y: [0, -18, 0] }}
-              whileHover={{ scale: 1.25, zIndex: 50 }}
-              transition={{ type: "spring", stiffness: 200, damping: 15 }}
-              className="
-                absolute top-1/3 right-10 w-64 h-72 rounded-3xl
-                overflow-hidden
-                border border-blue-500/20 backdrop-blur-2xl
-                shadow-[0_0_140px_rgba(59,130,246,0.6)]
-              "
-            >
-              <img
-                src="https://i.imgur.com/X7nGua5.jpeg"
-                alt="AI Dashboard"
-                className="w-full h-full object-cover opacity-85"
-              />
-
-              {/* overlay oscuro elegante */}
-              <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-black/10 to-transparent" />
-            </motion.div>
-
-            {/* CUADRO 3 – REDONDO (sin cambios) */}
-            <motion.div
-              animate={{ y: [0, 20, 0] }}
-              whileHover={{ scale: 1.35, zIndex: 60 }}
-              transition={{ type: "spring", stiffness: 180, damping: 14 }}
-              className="
-                absolute bottom-1/4 left-1/4 w-40 h-40 rounded-full
-                bg-blue-500/10 border border-blue-400/30
-                backdrop-blur-2xl flex items-center justify-center
-                shadow-[0_0_180px_rgba(59,130,246,0.85)]
-              "
-            >
-              <img
-                src="https://i.imgur.com/Re8C8Oc.jpeg"
-                alt="AI Brain"
-                className="w-24 h-24 rounded-full opacity-90"
-              />
-            </motion.div>
-
           </div>
+        </motion.div>
 
-        </div>
       </div>
     </section>
   );

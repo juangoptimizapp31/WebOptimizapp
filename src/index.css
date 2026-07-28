@@ -108,3 +108,203 @@
 ::-webkit-scrollbar-thumb:hover {
   background: #3b82f6;
 }
+
+/* ======================================================================
+   HERO V2 & DASHBOARD ISOLATED STYLES
+   ====================================================================== */
+.hero-v2-background-gradient {
+  background: 
+    radial-gradient(circle at 18% 42%, rgba(24, 92, 190, 0.14), transparent 42%),
+    radial-gradient(circle at 78% 45%, rgba(32, 90, 180, 0.12), transparent 45%),
+    linear-gradient(135deg, #020b1b, #041126 55%, #020918);
+}
+
+.problem-v2-background-gradient {
+  background:
+    radial-gradient(circle at 18% 40%, rgba(29, 91, 181, 0.10), transparent 38%),
+    radial-gradient(circle at 76% 48%, rgba(35, 100, 196, 0.08), transparent 44%),
+    linear-gradient(135deg, #020b1b, #041126 55%, #020918);
+}
+
+.problem-dashboard-card-sweep {
+  position: relative;
+  overflow: hidden;
+}
+
+.problem-dashboard-card-sweep::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: -45%;
+  width: 35%;
+  pointer-events: none;
+  opacity: 0;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(71, 145, 255, 0.22),
+    transparent
+  );
+  transform: skewX(-18deg);
+}
+
+.problem-dashboard-card-sweep-active::after {
+  opacity: 1;
+  animation: problem-dashboard-card-flash 650ms ease-out forwards;
+}
+
+@keyframes problem-dashboard-card-flash {
+  from {
+    left: -45%;
+  }
+  to {
+    left: 115%;
+  }
+}
+
+.hero-dashboard-panel {
+  background: linear-gradient(145deg, rgba(11, 29, 55, 0.92), rgba(5, 18, 37, 0.94));
+  border: 1px solid rgba(77, 126, 190, 0.14);
+}
+
+.hero-dashboard-card {
+  background: rgba(16, 38, 68, 0.72);
+  border: 1px solid rgba(77, 126, 190, 0.14);
+}
+
+.hero-dashboard-card-hover:hover {
+  background: rgba(19, 43, 76, 0.75);
+  border-color: rgba(93, 147, 218, 0.35);
+  box-shadow: 0 0 20px rgba(36, 107, 253, 0.15);
+}
+
+/* Grid Layouts */
+.hero-dashboard-top-row {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 14px;
+  width: 100%;
+}
+
+.hero-dashboard-metrics {
+  display: grid;
+  grid-template-columns: minmax(0, 1.35fr) minmax(0, 0.95fr) minmax(0, 1.15fr);
+  gap: 16px;
+  width: 100%;
+  align-items: stretch;
+}
+
+.hero-dashboard-metric-panel {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  width: 100%;
+  height: 230px;
+  padding: 18px;
+  border-radius: 13px;
+  background: linear-gradient(145deg, rgba(17, 39, 70, 0.82), rgba(9, 26, 50, 0.88));
+  border: 1px solid rgba(91, 143, 211, 0.16);
+  overflow: hidden;
+}
+
+.hero-dashboard-bottom-row {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 16px;
+  width: 100%;
+}
+
+/* Pulse animation on connecting lines */
+@keyframes hero-pulse-travel {
+  0% {
+    left: 0%;
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  90% {
+    opacity: 1;
+  }
+  100% {
+    left: 100%;
+    opacity: 0;
+  }
+}
+
+.hero-pulse-dot {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background-color: #60a5fa;
+  box-shadow: 0 0 8px #246bfd, 0 0 12px #246bfd;
+  animation: hero-pulse-travel 3s infinite linear;
+}
+
+/* Icon breathing glow animation */
+@keyframes hero-icon-breathe {
+  0%, 100% {
+    filter: drop-shadow(0 0 2px rgba(96, 165, 250, 0.2)) opacity(0.85);
+  }
+  50% {
+    filter: drop-shadow(0 0 8px rgba(96, 165, 250, 0.6)) opacity(1);
+  }
+}
+
+.hero-icon-active {
+  animation: hero-icon-breathe 4s infinite ease-in-out;
+}
+
+/* Scanner line animation */
+@keyframes hero-scanline-anim {
+  0% {
+    top: -2%;
+  }
+  100% {
+    top: 102%;
+  }
+}
+
+.hero-dashboard-scanline {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(to right, transparent, rgba(96, 165, 250, 0.08), rgba(36, 107, 253, 0.18), rgba(96, 165, 250, 0.08), transparent);
+  animation: hero-scanline-anim 8s infinite linear;
+  pointer-events: none;
+  z-index: 15;
+}
+
+/* SVG Line progress animation */
+@keyframes hero-svg-dash {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+.hero-svg-animated-path {
+  stroke-dasharray: 200;
+  stroke-dashoffset: 200;
+  animation: hero-svg-dash 2s ease-out forwards;
+}
+
+@keyframes hero-svg-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 0.25;
+  }
+}
+
+.hero-svg-animated-area {
+  animation: hero-svg-fade-in 1.5s ease-out 0.5s forwards;
+}
+
+
