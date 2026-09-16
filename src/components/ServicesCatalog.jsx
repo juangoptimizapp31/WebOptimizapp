@@ -235,7 +235,7 @@ const ServicesCatalog = () => {
                   onMouseEnter={() => setActiveCardIndex(index)}
                   onMouseLeave={() => setActiveCardIndex(null)}
                   onClick={() => setSelectedService(service)}
-                  className="relative rounded-2xl p-5 flex flex-col justify-between h-[355px] transition-all duration-300 hover:translate-y-[-3px] cursor-pointer group select-none"
+                  className="relative rounded-2xl p-5 flex flex-col justify-between h-[375px] transition-all duration-300 hover:translate-y-[-3px] cursor-pointer group select-none"
                   style={{
                     background: 'linear-gradient(145deg, rgba(13, 35, 65, 0.91), rgba(7, 24, 47, 0.96))',
                     border: isHovered || isPulsing ? '1px solid rgba(96, 165, 250, 0.42)' : '1px solid rgba(71, 127, 198, 0.20)',
@@ -262,7 +262,7 @@ const ServicesCatalog = () => {
                   </div>
 
                   {/* Content */}
-                  <div className="flex flex-col mt-4 flex-grow">
+                  <div className="flex flex-col mt-4 flex-grow min-h-0 pb-3">
                     <h3 className="text-[21px] xl:text-[23px] font-bold text-white leading-tight">
                       {service.title}
                     </h3>
@@ -273,7 +273,7 @@ const ServicesCatalog = () => {
 
                   {/* Short blue indicator line */}
                   <div
-                    className="w-10 h-[2px] rounded-full mt-4 transition-all duration-300"
+                    className="w-10 h-[2px] rounded-full mt-2 mb-3 transition-all duration-300"
                     style={{
                       background: '#246bfd',
                       boxShadow: '0 0 8px rgba(36, 107, 253, 0.65)'
@@ -281,11 +281,11 @@ const ServicesCatalog = () => {
                   />
 
                   {/* Bottom tags */}
-                  <div className="flex gap-1.5 justify-between mt-5 pt-1 border-t border-white/5">
+                  <div className="pt-1 flex flex-wrap items-center gap-1.5">
                     {service.tags.map((tag, i) => (
                       <span
                         key={i}
-                        className="px-2 h-[30px] rounded-[7px] border text-[12px] text-slate-300 font-medium flex items-center justify-center shrink-0"
+                        className="px-2 h-[26px] rounded-[6px] border text-[11px] text-slate-300 font-medium flex items-center justify-center whitespace-nowrap"
                         style={{
                           borderColor: 'rgba(36, 107, 253, 0.22)',
                           background: 'rgba(7, 23, 45, 0.4)'

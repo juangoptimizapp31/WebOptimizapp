@@ -28,10 +28,10 @@ const Navbar = () => {
       className="fixed top-0 left-0 right-0 z-50 bg-transparent flex justify-center w-full"
     >
       {/* ── Expanded Navbar Bar ─────────────────────────────── */}
-      <div className="w-[calc(100%-56px)] max-w-[1680px] h-[110px] lg:h-[120px] flex items-center justify-between mx-auto">
-        
+      <div className="w-full px-2 sm:w-[calc(100%_-_56px)] sm:px-0 max-w-[1680px] h-[110px] lg:h-[120px] flex items-center justify-between mx-auto">
+
         {/* LOGO + BRAND */}
-        <div className="flex items-center min-w-0">
+        <div className="flex items-center min-w-0 -ml-[52px] sm:ml-0">
           <img
             src="https://i.imgur.com/bAdU5VB.png"
             alt="OptimizApp Solutions SAS"
